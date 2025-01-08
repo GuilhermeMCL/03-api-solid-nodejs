@@ -8,10 +8,11 @@ datasource db {
 }
 
 model User {
-  id            String @id @default(uuid()) // id do usuario @default(uuid()) para gerar um id unico
+  id            String    @id @default(uuid()) // id do usuario @default(uuid()) para gerar um id unico
   name          String
-  email         String @unique // email do usuario @unique para garantir que não exista dois usuarios com o mesmo email
+  email         String    @unique // email do usuario @unique para garantir que não exista dois usuarios com o mesmo email
   password_hash String
+  checkIns      Checkin[] // checkins feitos pelo usuario
 
   @@map("users")
 }
@@ -22,17 +23,23 @@ model Checkin {
   validatedAt DateTime?
   // poderia ser boolean porem vou utilizar o tipo 'datetime?' pois diz a data de validação do checkin 
   //tambem ja afirma que foi validado
+  user        User      @relation(fields: [user_id], references: [id]) // usuario que fez o checkin
+  user_id     String
+
+  gym    Gym    @relation(fields: [gym_id], references: [id]) // academia que o usuario fez o checkin
+  gym_id String
 
   @@map("check_ins") //utilizando o map para definir o nome da tabela no banco de dados para check_ins o "@@" é utilizado para definir configurações de modelo e o "@" é utilizado para definir configurações de campo
 }
 
 model Gym {
-  id          String  @id @default(uuid()) // id da academia @default(uuid()) para gerar um id unico
+  id          String    @id @default(uuid()) // id da academia @default(uuid()) para gerar um id unico
   title       String // nome da academia
   description String? // descrição da academia opcional
   phone       String? // telefone da academia opcional
   latitude    Decimal // latitude "Decimal" é um tipo de dado que representa um número decimal
   longitude   Decimal // longitude "Decimal" é um tipo de dado que representa um número decimal
+  checkins    Checkin[] // checkins feitos na academia
 
   @@map("gyms")
 }
