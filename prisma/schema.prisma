@@ -3,14 +3,36 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql" // tipo de banco de dados
+  url      = env("DATABASE_URL") // url do banco de dados
 }
 
 model User {
-  id    String @id @default(uuid())
-  name  String
-  email String @unique
+  id            String @id @default(uuid()) // id do usuario @default(uuid()) para gerar um id unico
+  name          String
+  email         String @unique // email do usuario @unique para garantir que não exista dois usuarios com o mesmo email
+  password_hash String
 
   @@map("users")
+}
+
+model Checkin {
+  id          String    @id @default(uuid()) // id do checkin @default(uuid()) para gerar um id unico
+  createdAt   DateTime  @default(now()) // data de criação do checkin @default(now()) para pegar a data atual
+  validatedAt DateTime?
+  // poderia ser boolean porem vou utilizar o tipo 'datetime?' pois diz a data de validação do checkin 
+  //tambem ja afirma que foi validado
+
+  @@map("check_ins") //utilizando o map para definir o nome da tabela no banco de dados para check_ins o "@@" é utilizado para definir configurações de modelo e o "@" é utilizado para definir configurações de campo
+}
+
+model Gym {
+  id          String  @id @default(uuid()) // id da academia @default(uuid()) para gerar um id unico
+  title       String // nome da academia
+  description String? // descrição da academia opcional
+  phone       String? // telefone da academia opcional
+  latitude    Decimal // latitude "Decimal" é um tipo de dado que representa um número decimal
+  longitude   Decimal // longitude "Decimal" é um tipo de dado que representa um número decimal
+
+  @@map("gyms")
 }
