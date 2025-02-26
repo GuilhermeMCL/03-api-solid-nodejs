@@ -20,9 +20,7 @@ model User {
 model Checkin {
   id          String    @id @default(uuid()) // id do checkin @default(uuid()) para gerar um id unico
   createdAt   DateTime  @default(now()) // data de criação do checkin @default(now()) para pegar a data atual
-  validatedAt DateTime?
-  // poderia ser boolean porem vou utilizar o tipo 'datetime?' pois diz a data de validação do checkin 
-  //tambem ja afirma que foi validado
+  validatedAt DateTime? // poderia ser boolean porem vou utilizar o tipo 'datetime?' pois diz a data de validação do checkin   //tambem ja afirma que foi validado
   user        User      @relation(fields: [user_id], references: [id]) // usuario que fez o checkin
   user_id     String
 
